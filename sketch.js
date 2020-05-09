@@ -186,9 +186,15 @@ class Particle{
       var txt1 = myResults1;
       var txt2 = myResults2;
       var tx = String(txt);
+      var tx1 = String(txt1);
       textSize(7);
-      fill(255);
+      //fill(255);
+
+      noStroke();
+      fill(100, 100, 215, 80);
       text(tx, this.pos.x, this.pos.y);
+      fill(20, 100, 215, 80);
+      text(tx1, this.pos.x+random(600, -600), this.pos.y+random(600, -600));
 
   }
 
