@@ -1,5 +1,5 @@
 // cross pattern
-
+let theShader;
 var myResults = [];
 var myResults1 = [];
 var myResults2 = [];
@@ -14,7 +14,17 @@ var cb = new Codebird();
 // particle
 
 var attractor;
+var attractor1;
+var attractor2;
 var particles = [];
+var particles1 = [];
+var particles2 = [];
+
+
+function preload(){
+  // load the shader
+//  theShader = loadShader('assets/basic.vert', 'assets/basic.frag');
+}
 
 function setup() {                      //---------setup top
   //createCanvas(400,400);
@@ -141,7 +151,20 @@ createCanvas(window.innerWidth, window.innerHeight);
   for (var i =0; i<50; i++){
     particles.push(particle = new Particle());
   }
+
+  for (var q =0; q<50; q++){
+    particles.push(particle = new Particle1());
+  }
+
+  for (var i =0; i<50; i++){
+    particles.push(particle = new Particle());
+    particles.push(particle1 = new Particle1());
+    particles.push(particle2 = new Particle2());
+
+  }
   attractor = createVector(200, 200);
+  attractor1 = createVector(width-150, height-400);
+  attractor2 = createVector(mouseX, mouseY);
 
 }                                      //---------setup
 
@@ -154,11 +177,30 @@ function draw(){
  for (var i =0; i<particles.length; i++){
    var particle = particles[i];
    particle.attracted(attractor);
+   particle.attracted(attractor1);
+   particle.attracted(attractor2);
    particle.update();
    //particle.mouse();
    particle.show();
 
   }
+  // for (var q =0; q<particles.length; q++){
+  //   var particle1 = particles1[q];
+  //   particle1.attracted(attractor);
+  //   particle1.update();
+  //   //particle.mouse();
+  //   particle1.show();
+  //
+  //  }
+  //
+  //  for (var u =0; u<particles.length; u++){
+  //    var particle2 = particles1[u];
+  //    particle2.attracted(attractor);
+  //    particle2.update();
+  //    //particle.mouse();
+  //    particle2.show();
+  //
+  //   }
 
 }
 
@@ -187,14 +229,17 @@ class Particle{
       var txt2 = myResults2;
       var tx = String(txt);
       var tx1 = String(txt1);
+      var tx2 = String(txt2);
       textSize(7);
       //fill(255);
 
       noStroke();
-      fill(100, 100, 215, 80);
+      fill(100, 100, 215, 90);
       text(tx, this.pos.x, this.pos.y);
-      fill(20, 100, 215, 80);
-      text(tx1, this.pos.x+random(600, -600), this.pos.y+random(600, -600));
+      fill(20, 100, 215, 90);
+      text(tx1, this.pos.x+400, this.pos.y-200);
+      fill(120, 200, 215, 90);
+      text(tx2, this.pos.x-501, this.pos.y+140);
 
   }
 
@@ -202,7 +247,156 @@ class Particle{
     var force = p5.Vector.sub(target, this.pos);   //direction
     var dsquared = force.magSq();
     dsquared = constrain(dsquared, 25, 500);   //constrain itself not to be too extreme
-    var G = 10;
+    var G = 4;
+    var strength = G / dsquared;
+    force.setMag(strength);
+    this.acc = force;
+
+    // if (abs(this.pos.x-mouseX)<60){
+    //   this.acc.x *= -12.03;
+    // }else{
+    //   this.acc.x = force.x;
+    // }
+    // // }else{
+    // //   this.acc.x = random(-0.02, 0.02);}
+    //  if (abs(this.pos.y-mouseY)<60){
+    //   this.acc.y *= -12.03;
+    // }else{
+    //   this.acc.y = force.y;
+    // }
+  }
+
+//   mouse(){
+//  if (abs(this.pos.x-mouseX)<30){
+//    this.acc.x *= -12.03;
+//  }
+//  // }else{
+//  //   this.acc.x = random(-0.02, 0.02);}
+//   if (abs(this.pos.y-mouseY)<30){
+//    this.acc.y *= -12.03;
+//  }
+// //  }else{
+// //    this.vel.y = random(-0.02, 0.02);}
+// // }
+// }
+
+}
+
+class Particle1{
+
+  constructor(){
+    this.pos = createVector(random(width), random(height));
+    this.vel = p5.Vector.random2D();
+    this.acc = createVector();
+    var force;
+  }
+
+  update(){
+    this.pos.add(this.vel);
+    this.vel.add(this.acc);
+  }
+
+  show(){
+
+      //stroke(255);
+      //strokeWeight(4);
+      //point(this.pos.x, this.pos.y);
+
+      var txt = myResults ;              //scope issue
+      var txt1 = myResults1;
+      var txt2 = myResults2;
+      var tx = String(txt);
+      var tx1 = String(txt1);
+      var tx2 = String(txt2);
+      textSize(7);
+      //fill(255);
+
+
+      fill(20, 100, 215, 90);
+      text(tx1, this.pos.x, this.pos.y);
+
+
+  }
+
+  attracted(target){
+    var force = p5.Vector.sub(target, this.pos);   //direction
+    var dsquared = force.magSq();
+    dsquared = constrain(dsquared, 25, 500);   //constrain itself not to be too extreme
+    var G = 4;
+    var strength = G / dsquared;
+    force.setMag(strength);
+    this.acc = force;
+
+    if (abs(this.pos.x-mouseX)<10){
+      this.acc.x *= -12.03;
+    }else{
+      this.acc.x = force.x;
+    }
+    // }else{
+    //   this.acc.x = random(-0.02, 0.02);}
+     if (abs(this.pos.y-mouseY)<10){
+      this.acc.y *= -12.03;
+    }else{
+      this.acc.y = force.y;
+    }
+  }
+
+//   mouse(){
+//  if (abs(this.pos.x-mouseX)<30){
+//    this.acc.x *= -12.03;
+//  }
+//  // }else{
+//  //   this.acc.x = random(-0.02, 0.02);}
+//   if (abs(this.pos.y-mouseY)<30){
+//    this.acc.y *= -12.03;
+//  }
+// //  }else{
+// //    this.vel.y = random(-0.02, 0.02);}
+// // }
+// }
+
+}
+
+class Particle2{
+
+  constructor(){
+    this.pos = createVector(random(width), random(height));
+    this.vel = p5.Vector.random2D();
+    this.acc = createVector();
+    var force;
+  }
+
+  update(){
+    this.pos.add(this.vel);
+    this.vel.add(this.acc);
+  }
+
+  show(){
+
+      //stroke(255);
+      //strokeWeight(4);
+      //point(this.pos.x, this.pos.y);
+
+      var txt = myResults ;              //scope issue
+      var txt1 = myResults1;
+      var txt2 = myResults2;
+      var tx = String(txt);
+      var tx1 = String(txt1);
+      var tx2 = String(txt2);
+      textSize(7);
+      //fill(255);
+
+
+      fill(120, 200, 215, 90);
+      text(tx2, this.pos.x, this.pos.y);
+
+  }
+
+  attracted(target){
+    var force = p5.Vector.sub(target, this.pos);   //direction
+    var dsquared = force.magSq();
+    dsquared = constrain(dsquared, 25, 500);   //constrain itself not to be too extreme
+    var G = 4;
     var strength = G / dsquared;
     force.setMag(strength);
     this.acc = force;
