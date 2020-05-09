@@ -196,19 +196,19 @@ class Particle{
     var force = p5.Vector.sub(target, this.pos);   //direction
     var dsquared = force.magSq();
     dsquared = constrain(dsquared, 25, 500);   //constrain itself not to be too extreme
-    var G = 30;
+    var G = 10;
     var strength = G / dsquared;
     force.setMag(strength);
     this.acc = force;
 
-    if (abs(this.pos.x-mouseX)<30){
+    if (abs(this.pos.x-mouseX)<10){
       this.acc.x *= -12.03;
     }else{
       this.acc.x = force.x;
     }
     // }else{
     //   this.acc.x = random(-0.02, 0.02);}
-     if (abs(this.pos.y-mouseY)<30){
+     if (abs(this.pos.y-mouseY)<10){
       this.acc.y *= -12.03;
     }else{
       this.acc.y = force.y;
