@@ -1,7 +1,10 @@
 
 // cross pattern
 let dim;
-
+let attlength;
+let tlength;
+let tSize = 10;
+let tAlph ;
 let theShader;
 var myResults = [];
 var myResults1 = [];
@@ -40,9 +43,9 @@ cb.setToken(token, tokenSecret);
 
 
 //const particlesLength = Math.floor(window.innerWidth/4);
-const particlesLength = 1;
-const particles1Length = 1;
-const particles2Length = 1;
+const particlesLength = 124;
+const particles1Length = 124;
+const particles2Length = 124;
 //const particles1Length = Math.floor(window.innerWidth);
 
 for(let i = 0; i<particlesLength; i++){
@@ -56,11 +59,9 @@ for(let i = 0; i<particles2Length; i++){
   particles2.push(new Particle2());
 }
 
-for(let i = 0; i<10; i++){
-  attractors.push(createVector(random(width), random(height)));
-}
 
-// for(let i = 0; i<particles1Length; i++){
+
+// for(let i = 015i<particles1Length; i++){
 //    particles1.push(new Particle1());
 // }
 
@@ -98,6 +99,9 @@ var params = {
       //  (255/i);
 
         //let myResults = statuses;
+        tlength = statuses.length;
+        tAlph = tlength;
+        attlength = tlength;
        myResults = tweet.text;
         let words = tweet.text.split(" ");
         console.log(words);
@@ -184,15 +188,26 @@ cb.__call(
 xim = createVector(1500, 900);
 attractor1 = createVector(width-150, height-400);
 attractor2 = createVector(mouseX, mouseY);
-background(0);
+//background(random(255), random(255), random(255), random(100));
+background(10);
+
+//noLoop();
+console.log(tlength);
+
+for(let i = 0; i<10; i++){
+  attractors.push(createVector(random(width), random(height)));
+}
 
 }                                      //---------setup
 
 function draw(){
+
+
 //background(0);
 //stroke(255);
 //strokeWeight(4);
 //drawGradient(width/2, height / 2);
+console.log(tlength);
 
 for (var i =0; i<attractors.length; i++){
 //  point(attractors[i].x, attractors[i].y);
@@ -202,7 +217,7 @@ for (var i =0; i<attractors.length; i++){
 for (var i =0; i<particles.length; i++){
  var particle = particles[i];
  for (var j =0; j<attractors.length; j++){
-    particle.attracted(attractors[j]);
+    particle.attracted(attractors[j], j);
  }
 }
 
@@ -263,7 +278,7 @@ for (var i =0; i<particles2.length; i++){
 class Particle{     //particle thisone
 
 constructor(){
-  this.pos = createVector(width/2, height/2);
+  this.pos = createVector(random(width), random(height));
   //  this.vel = p5.Vector.random2D();
   this.prev = createVector(this.pos);
   this.vel = createVector(random(-3,3));
@@ -290,13 +305,13 @@ show(){
     var tx = String(txt);
     var tx1 = String(txt1);
     var tx2 = String(txt2);
-    textSize(10);
+    textSize(tSize);
     //fill(255);
 
     //noStroke();
     strokeWeight(1);
   //  textFont(font);
-    fill(100, 230, 245, 10);
+    fill(100, 230, 245, tAlph);
     text(tx, this.pos.x, this.pos.y);
     // fill(100, 140, 245, 10);
     // text(tx1, this.pos.x-400, this.pos.y+300);
@@ -317,13 +332,16 @@ show(){
 
 }
 
-attracted(target){
+attracted(target, j){
   var force = p5.Vector.sub(target, this.pos);   //direction
   var dsquared = force.magSq();
   dsquared = constrain(dsquared, 1, 50);   //constrain itself not to be too extreme
   var G = 50;
   var strength = G / dsquared;
   force.setMag(strength);
+  if (j % 3  == 1){
+    force.mult(-1);
+  }
   this.acc.add(force);  //force accumilation
 
   // if (abs(this.pos.x-mouseX)<10){
@@ -391,11 +409,11 @@ show(){
     var tx = String(txt);
     var tx1 = String(txt1);
     var tx2 = String(txt2);
-    textSize(10);
+    textSize(tSize);
     //fill(255);
 
 
-    fill(220, 100, 130, 40);
+    fill(220, 100, 130, tAlph);
     text(tx1, this.pos.x, this.pos.y);
 
 
@@ -470,11 +488,11 @@ show(){
     var tx = String(txt);
     var tx1 = String(txt1);
     var tx2 = String(txt2);
-    textSize(10);
+    textSize(tSize);
     //fill(255);
 
 
-    fill(40, 0, 255, 30);
+    fill(40, 0, 255, tAlph);
     text(tx2, this.pos.x, this.pos.y);
 
 }
@@ -530,4 +548,9 @@ function drawGradient(x, y) {
     h -=0.1;
 
   }
+}
+
+function mousePressed() {
+  redraw();
+  //saveCanvas('myCanvas', 'jpg');
 }
