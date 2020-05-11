@@ -365,7 +365,7 @@ attracted(target){
 class Particle1{
 
 constructor(){
-  this.pos = createVector(width/2, height/2);
+  this.pos = createVector(random(width), random(height));
   //  this.vel = p5.Vector.random2D();
   this.prev = createVector(this.pos);
   this.vel = createVector();
@@ -374,8 +374,8 @@ constructor(){
 }
 
 update(){
-  this.pos.add(this.vel);
   this.vel.add(this.acc);
+  this.pos.add(this.vel);
   this.acc.mult(0);
 }
 
@@ -405,7 +405,7 @@ attracted(target){
   var force = p5.Vector.sub(target, this.pos);   //direction
   var dsquared = force.magSq();
   dsquared = constrain(dsquared, 1, 50);   //constrain itself not to be too extreme
-  var G = 50;
+  var G = 20;
   var strength = G / dsquared;
   force.setMag(strength);
   this.acc.add(force);
@@ -443,7 +443,7 @@ attracted(target){
 class Particle2{
 
 constructor(){
-  this.pos = createVector(width/2, height/2);
+  this.pos = createVector(random(width), random(height));
   //  this.vel = p5.Vector.random2D();
   this.prev = createVector(this.pos);
   this.vel = createVector(random(0, 0));
@@ -453,8 +453,8 @@ constructor(){
 }
 
 update(){
-  this.pos.add(this.vel);
   this.vel.add(this.acc);
+  this.pos.add(this.vel);
   this.acc.mult(0);     //reset
 }
 
@@ -474,7 +474,7 @@ show(){
     //fill(255);
 
 
-    fill(120, 200, 215, 30);
+    fill(40, 0, 255, 30);
     text(tx2, this.pos.x, this.pos.y);
 
 }
@@ -483,7 +483,7 @@ attracted(target){
   var force = p5.Vector.sub(target, this.pos);   //direction
   var dsquared = force.magSq();
   dsquared = constrain(dsquared, 1, 50);   //constrain itself not to be too extreme
-  var G = 50;
+  var G = 150;
   var strength = G / dsquared;
   force.setMag(strength);
   this.acc.add(force);
