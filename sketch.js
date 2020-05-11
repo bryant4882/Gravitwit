@@ -41,10 +41,19 @@ cb.setToken(token, tokenSecret);
 
 //const particlesLength = Math.floor(window.innerWidth/4);
 const particlesLength = 1;
+const particles1Length = 1;
+const particles2Length = 1;
 //const particles1Length = Math.floor(window.innerWidth);
 
 for(let i = 0; i<particlesLength; i++){
   particles.push(new Particle());
+}
+for(let i = 0; i<particles1Length; i++){
+  particles1.push(new Particle1());
+}
+
+for(let i = 0; i<particles2Length; i++){
+  particles2.push(new Particle2());
 }
 
 for(let i = 0; i<10; i++){
@@ -195,12 +204,31 @@ for (var i =0; i<particles.length; i++){
  for (var j =0; j<attractors.length; j++){
     particle.attracted(attractors[j]);
  }
+}
+
+ for (var i =0; i<particles1.length; i++){
+  var particle1 = particles1[i];
+  for (var j =0; j<attractors.length; j++){
+     particle1.attracted(attractors[j]);
+  }
+}
+
+for (var i =0; i<particles2.length; i++){
+ var particle2 = particles2[i];
+ for (var j =0; j<attractors.length; j++){
+    particle2.attracted(attractors[j]);
+ }
+}
 
  //particle.attracted(attractor1);
  //particle.attracted(attractor2);
  particle.update();
+ particle1.update();
+ particle2.update();
  //particle.mouse();
  particle.show();
+ particle1.show();
+ particle2.show();
 
 }
 
@@ -230,7 +258,7 @@ for (var i =0; i<particles.length; i++){
 // background(0,90);
 
 
-}
+
 
 class Particle{     //particle thisone
 
@@ -238,7 +266,7 @@ constructor(){
   this.pos = createVector(width/2, height/2);
   //  this.vel = p5.Vector.random2D();
   this.prev = createVector(this.pos);
-  this.vel = createVector(random(-3,3))
+  this.vel = createVector(random(-3,3));
   this.acc = createVector();
   var force;
 
@@ -337,8 +365,10 @@ attracted(target){
 class Particle1{
 
 constructor(){
-  this.pos = createVector(random(width), random(height));
-  this.vel = p5.Vector.random2D();
+  this.pos = createVector(width/2, height/2);
+  //  this.vel = p5.Vector.random2D();
+  this.prev = createVector(this.pos);
+  this.vel = createVector();
   this.acc = createVector();
   var force;
 }
@@ -346,6 +376,7 @@ constructor(){
 update(){
   this.pos.add(this.vel);
   this.vel.add(this.acc);
+  this.acc.mult(0);
 }
 
 show(){
@@ -360,11 +391,11 @@ show(){
     var tx = String(txt);
     var tx1 = String(txt1);
     var tx2 = String(txt2);
-    textSize(7);
+    textSize(10);
     //fill(255);
 
 
-    fill(20, 100, 215, 90);
+    fill(220, 100, 130, 40);
     text(tx1, this.pos.x, this.pos.y);
 
 
@@ -373,24 +404,24 @@ show(){
 attracted(target){
   var force = p5.Vector.sub(target, this.pos);   //direction
   var dsquared = force.magSq();
-  dsquared = constrain(dsquared, 25, 500);   //constrain itself not to be too extreme
-  var G = 4;
+  dsquared = constrain(dsquared, 1, 50);   //constrain itself not to be too extreme
+  var G = 50;
   var strength = G / dsquared;
   force.setMag(strength);
-  this.acc = force;
+  this.acc.add(force);
 
-  if (abs(this.pos.x-mouseX)<10){
-    this.acc.x *= -12.03;
-  }else{
-    this.acc.x = force.x;
-  }
+  // if (abs(this.pos.x-mouseX)<10){
+  //   this.acc.x *= -12.03;
   // }else{
-  //   this.acc.x = random(-0.02, 0.02);}
-   if (abs(this.pos.y-mouseY)<10){
-    this.acc.y *= -12.03;
-  }else{
-    this.acc.y = force.y;
-  }
+  //   this.acc.x = force.x;
+  // }
+  // // }else{
+  // //   this.acc.x = random(-0.02, 0.02);}
+  //  if (abs(this.pos.y-mouseY)<10){
+  //   this.acc.y *= -12.03;
+  // }else{
+  //   this.acc.y = force.y;
+  // }
 }
 
 //   mouse(){
@@ -412,15 +443,19 @@ attracted(target){
 class Particle2{
 
 constructor(){
-  this.pos = createVector(random(width), random(height));
-  this.vel = p5.Vector.random2D();
+  this.pos = createVector(width/2, height/2);
+  //  this.vel = p5.Vector.random2D();
+  this.prev = createVector(this.pos);
+  this.vel = createVector(random(0, 0));
   this.acc = createVector();
   var force;
+
 }
 
 update(){
   this.pos.add(this.vel);
   this.vel.add(this.acc);
+  this.acc.mult(0);     //reset
 }
 
 show(){
@@ -435,11 +470,11 @@ show(){
     var tx = String(txt);
     var tx1 = String(txt1);
     var tx2 = String(txt2);
-    textSize(7);
+    textSize(10);
     //fill(255);
 
 
-    fill(120, 200, 215, 90);
+    fill(120, 200, 215, 30);
     text(tx2, this.pos.x, this.pos.y);
 
 }
@@ -447,25 +482,25 @@ show(){
 attracted(target){
   var force = p5.Vector.sub(target, this.pos);   //direction
   var dsquared = force.magSq();
-  dsquared = constrain(dsquared, 25, 500);   //constrain itself not to be too extreme
-  var G = 44;
+  dsquared = constrain(dsquared, 1, 50);   //constrain itself not to be too extreme
+  var G = 50;
   var strength = G / dsquared;
   force.setMag(strength);
-  this.acc = force;
+  this.acc.add(force);
 
-  if (abs(this.pos.x-mouseX)<10){
-    this.acc.x *= -12.03;
-  }else{
-    this.acc.x = force.x;
-  }
-  // }else{
-  //   this.acc.x = random(-0.02, 0.02);}
-   if (abs(this.pos.y-mouseY)<10){
-    this.acc.y *= -12.03;
-  }else{
-    this.acc.y = force.y;
-  }
-}
+//   if (abs(this.pos.x-mouseX)<10){
+//     this.acc.x *= -12.03;
+//   }else{
+//     this.acc.x = force.x;
+//   }
+//   // }else{
+//   //   this.acc.x = random(-0.02, 0.02);}
+//    if (abs(this.pos.y-mouseY)<10){
+//     this.acc.y *= -12.03;
+//   }else{
+//     this.acc.y = force.y;
+//   }
+// }
 
 //   mouse(){
 //  if (abs(this.pos.x-mouseX)<30){
@@ -481,7 +516,9 @@ attracted(target){
 // // }
 // }
 
+  }
 }
+
 
 function drawGradient(x, y) {
   let radius = width/2;
