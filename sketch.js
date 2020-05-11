@@ -3,7 +3,7 @@
 let dim;
 let attlength;
 let tlength;
-let tSize = 10;
+let tSize = 2;
 let tAlph ;
 let theShader;
 var myResults = [];
