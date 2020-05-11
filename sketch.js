@@ -13,10 +13,11 @@ var token = '364475473-kMBumzdzoxKZcduTwFGizG0iyMldRx1CQtcRXm2w';
 var tokenSecret = 'KBjBbqUZ0of2SQZDFEqSFof7kQPpENigIh7d3BMUQyCjN';
 
 var cb = new Codebird();
+//
 
 // particle
 
-var attractor;
+var attractors = [];
 var attractor1;
 var attractor2;
 var particles = [];
@@ -24,10 +25,10 @@ var particles1 = [];
 var particles2 = [];
 
 
-function preload(){
-// load the shader
-//  theShader = loadShader('assets/basic.vert', 'assets/basic.frag');
-}
+
+// function preload() {
+//   font = loadFont('https://fonts.gstatic.com/s/newscycle/v14/CSR54z1Qlv-GDxkbKVQ_dFsvWNRevA.ttf');
+// }
 
 function setup() {                      //---------setup top
 //createCanvas(400,400);
@@ -38,11 +39,16 @@ cb.setConsumerKey(consumerKey, consumerSecret);
 cb.setToken(token, tokenSecret);
 
 
-const particlesLength = Math.floor(window.innerWidth/4);
-const particles1Length = Math.floor(window.innerWidth);
+//const particlesLength = Math.floor(window.innerWidth/4);
+const particlesLength = 1;
+//const particles1Length = Math.floor(window.innerWidth);
 
 for(let i = 0; i<particlesLength; i++){
   particles.push(new Particle());
+}
+
+for(let i = 0; i<10; i++){
+  attractors.push(createVector(random(width), random(height)));
 }
 
 // for(let i = 0; i<particles1Length; i++){
@@ -80,7 +86,7 @@ var params = {
         //print(tweet.text);
         //fill('#' + tweet.user.profile_background_color);
 
-        fill(255/i);
+      //  (255/i);
 
         //let myResults = statuses;
        myResults = tweet.text;
@@ -107,7 +113,7 @@ var params = {
       if (!tweet1.retweeted_status) {
 
 
-        fill(255);
+        //fill(255);
 
         //let myResults = statuses;
        myResults1 = tweet1.text;
@@ -135,7 +141,7 @@ cb.__call(
         //print(tweet.text);
         //fill('#' + tweet.user.profile_background_color);
 
-        fill(255/i);
+    //    fill(255/i);
 
         //let myResults = statuses;
        myResults2 = tweet2.text;
@@ -159,30 +165,37 @@ cb.__call(
 //   particles.push(particle = new Particle1());
 // }
 
-for (var i =0; i<50; i++){
-  particles.push(particle = new Particle());
-  particles.push(particle1 = new Particle1());
-  particles.push(particle2 = new Particle2());
-
-}
-attractor = createVector(width/2, height/2);    //set cm
+// for (var i =0; i<1; i++){
+//   particles.push(particle = new Particle());
+//   // particles.push(particle1 = new Particle1());
+//   // particles.push(particle2 = new Particle2());
+//
+// }
+//attractor = createVector(width/2, height/2);    //set cm
 xim = createVector(1500, 900);
 attractor1 = createVector(width-150, height-400);
 attractor2 = createVector(mouseX, mouseY);
+background(0);
 
 }                                      //---------setup
 
 function draw(){
-background(0);
-stroke(255);
+//background(0);
+//stroke(255);
 //strokeWeight(4);
 //drawGradient(width/2, height / 2);
 
-point(attractor.x, attractor.y);        // draw attractor
+for (var i =0; i<attractors.length; i++){
+//  point(attractors[i].x, attractors[i].y);
+}
+//point(attractors[i].x, attractors[i].y);        // draw attractor
 
 for (var i =0; i<particles.length; i++){
  var particle = particles[i];
- particle.attracted(attractor);
+ for (var j =0; j<attractors.length; j++){
+    particle.attracted(attractors[j]);
+ }
+
  //particle.attracted(attractor1);
  //particle.attracted(attractor2);
  particle.update();
@@ -190,6 +203,13 @@ for (var i =0; i<particles.length; i++){
  particle.show();
 
 }
+
+
+// for (var i =0; i<attractors.length; i++){
+//
+//  //point(attractors[i].x, attractors[i].y);
+//
+// }
 // for (var q =0; q<particles.length; q++){
 //   var particle1 = particles1[q];
 //   particle1.attracted(attractor);
@@ -215,16 +235,19 @@ for (var i =0; i<particles.length; i++){
 class Particle{     //particle thisone
 
 constructor(){
-  this.pos = createVector(random(width-300, width||0, 300), random(height-150, height||0, 150 ));
-//  this.vel = p5.Vector.random2D();
+  this.pos = createVector(width/2, height/2);
+  //  this.vel = p5.Vector.random2D();
+  this.prev = createVector(this.pos);
   this.vel = createVector(random(-3,3))
   this.acc = createVector();
   var force;
+
 }
 
 update(){
-  this.pos.add(this.vel);
   this.vel.add(this.acc);
+  this.pos.add(this.vel);
+  this.acc.mult(0);     //reset
 }
 
 show(){
@@ -239,27 +262,41 @@ show(){
     var tx = String(txt);
     var tx1 = String(txt1);
     var tx2 = String(txt2);
-    textSize(7);
+    textSize(10);
     //fill(255);
 
-    noStroke();
-    fill(100, 100, 215, 90);
+    //noStroke();
+    strokeWeight(1);
+  //  textFont(font);
+    fill(100, 230, 245, 10);
     text(tx, this.pos.x, this.pos.y);
-    fill(20, 100, 215, 90);
-    text(tx1, this.pos.x+400, this.pos.y-200);
-    fill(120, 200, 215, 90);
-    text(tx2, this.pos.x-501, this.pos.y+140);
+    // fill(100, 140, 245, 10);
+    // text(tx1, this.pos.x-400, this.pos.y+300);
+    // fill(230, 230, 100, 10);
+    // text(tx2, this.pos.x+1300, this.pos.y-100);
+
+  //  line(this.pos.x, this.pos.y, this.prev.x, this.prev.y);
+
+    this.prev.x = this.pos.x;
+    this.prev.y = this.pos.y;
+
+  //  textFont(font);
+  //  fill(20, 100, 215, 90);
+  //  text(tx1, this.pos.x+400, this.pos.y-200);
+  //  textFont(font);
+  //  fill(120, 200, 215, 90);
+  //  text(tx2, this.pos.x-501, this.pos.y+140);
 
 }
 
 attracted(target){
   var force = p5.Vector.sub(target, this.pos);   //direction
   var dsquared = force.magSq();
-  dsquared = constrain(dsquared, 25, 500);   //constrain itself not to be too extreme
-  var G = 44;
+  dsquared = constrain(dsquared, 1, 50);   //constrain itself not to be too extreme
+  var G = 50;
   var strength = G / dsquared;
   force.setMag(strength);
-  this.acc = force;
+  this.acc.add(force);  //force accumilation
 
   // if (abs(this.pos.x-mouseX)<10){
   //   this.vel.x *= -1.2;
@@ -270,14 +307,14 @@ attracted(target){
   //   this.vel.y *= -1.2;
   // }
 
-  if (this.pos.x < 0 || this.pos.x >width){
- this.vel.x *=-1;
-}
+//   if (this.pos.x < 0 || this.pos.x >width){
+//  this.vel.x *=-1;
+// }
 
 
-if (this.pos.y < 0 || this.pos.y > height){
- this.vel.y *=-1;
-}
+// if (this.pos.y < 0 || this.pos.y > height){
+//  this.vel.y *=-1;
+// }
 
 }
 
